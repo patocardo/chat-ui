@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState} from 'react';
+
+import OtherUser from './components/OtherUser';
+import MessagesList from './components/MessagesList';
+import InputBoard from './components/InputBoard';
+import mockChat from './mock/mockChat.json';
 import './App.css';
 
 function App() {
+  const [messages, setMessages] = useState(mockChat);
+  const [userStatusClass, setUserStatusClass] = useState('status-inactive');
+  const [newMessages, setNewMessages] = useState(mockChat.reduce((sum, msg) => {
+    return sum += (msg.status === 'received') ? 1 : 0;
+  }, 0));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="me">
+        <span className={userStatusClass}></span>
+        Me Iam ({newMessages} new messages)
+      </div>
+      <OtherUser />
+      <MessagesList messages={messages} />
+      <InputBoard />
     </div>
   );
 }
